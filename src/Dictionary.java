@@ -38,9 +38,7 @@ public class Dictionary {
                     if (word.charAt(word.length()-1) == ' '){
                         word = word.substring(0, word.length()-1);
                     }
-                    //  System.out.println(word);
                     definition = definition.substring(definition.indexOf(". ") + 2);
-                    //   System.out.println(definition);
                     map.put(word.toLowerCase(), definition.toLowerCase());
                 }
             }
