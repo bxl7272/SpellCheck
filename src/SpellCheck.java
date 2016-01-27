@@ -1,6 +1,5 @@
 
 import java.util.*;
-import java.awt.*;
 import javax.swing.*;
 import java.awt.Color;
 import java.io.FileNotFoundException;
@@ -10,10 +9,11 @@ public class SpellCheck {
 
     static String word = "";
     static Scanner sc = new Scanner(System.in);
+    static Dictionary dict;
 
     public static void main(String[] args) throws FileNotFoundException, IOException { //User decides if they want to use dictionary or spellcheck 
+        dict = new Dictionary("dictionary.txt");
         System.out.println("Would you like to use the dictionary or the spellcheck?");
-        Dictionary dict = new Dictionary("dictionary.txt");
         int choice = sc.nextInt();
         if (choice == 1) {
             define(word);
@@ -23,10 +23,12 @@ public class SpellCheck {
     }
 
     public static void define(String word) {
-        if (word == "") {
-            System.out.println("What is the word you are trying to spell?");
+        while (word.equals("")) {
+            System.out.println("What is the word you are trying to define?");
             word = sc.next();
         }
+        String definition = dict.define(word);
+        System.out.println("The definition(s) of "+word +" is: "+definition);
     }
 
     public static void spellCheck(String word) {
@@ -34,16 +36,17 @@ public class SpellCheck {
             System.out.println("What is the word you are trying to spell?");
             word = sc.next();
         }
-
-        isWord k = new isWord();//Uses isWord Class to check for word
-        boolean isWord = k.isWord(word);
-
+        boolean isWord = dict.isWord(word);
         if (isWord) {
             System.out.println(word + " is a correctly spelled word!");
+            define(word);
         } else {//If it's not a word, then tries to find the closest word to input
-            closestWord n = new closestWord();
-            String closestWord = n.closestWord(word);
-            System.out.println("Is " + closestWord + " the word you are trying to spell?");
+            System.out.println("That's not spelled correctly.");
+            List<String> closestWords = dict.closestWords(word);
+            System.out.println("Are any of these the word you are trying to spell?");
+            for (String suggestion : closestWords) {
+                System.out.println(closestWords);
+            }
 
         }
     }
