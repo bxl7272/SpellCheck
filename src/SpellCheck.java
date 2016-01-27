@@ -13,32 +13,27 @@ public class SpellCheck {
 
     public static void main(String[] args) throws FileNotFoundException, IOException { //User decides if they want to use dictionary or spellcheck 
         dict = new Dictionary("dictionary.txt");
-        System.out.println("Would you like to use the dictionary or the spellcheck?");
-        int choice = sc.nextInt();
-        if (choice == 1) {
-            define(word);
-        } else {
-            spellCheck(word);
-        }
+        lookup();
     }
 
-    public static void define(String word) {
-        while (word.equals("")) {
-            System.out.println("What is the word you are trying to define?");
-            word = sc.next();
+    public static void lookup(){
+        System.out.println("What is the word you are trying to lookup?");
+            word = sc.nextLine();
+            spellCheck(word);
         }
+    
+    public static void define(String word) {
         String definition = dict.define(word);
-        System.out.println("The definition(s) of "+word +" is: "+definition);
+        System.out.println("The definition(s) of "+word.toLowerCase() +" is: "+definition);
     }
 
     public static void spellCheck(String word) {
         while (word.equals("")) {//If this is the first time they are using spellcheck, asks for word they are trying to spell
-            System.out.println("What is the word you are trying to spell?");
-            word = sc.next();
+            word = sc.nextLine();
         }
-        boolean isWord = dict.isWord(word);
+        boolean isWord = dict.isWord(word.toLowerCase());
         if (isWord) {
-            System.out.println(word + " is a correctly spelled word!");
+            System.out.println(word.toLowerCase() + " is a correctly spelled word!");
             define(word);
         } else {//If it's not a word, then tries to find the closest word to input
             System.out.println("That's not spelled correctly.");
@@ -49,5 +44,6 @@ public class SpellCheck {
             }
 
         }
+        lookup();
     }
 }

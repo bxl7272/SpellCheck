@@ -22,7 +22,7 @@ public class Dictionary {
 
     public Dictionary(String file_path) throws FileNotFoundException, IOException {
         String word = "";
-        String definition = "";
+        String definition;
         FileReader f = new FileReader(file_path);
         BufferedReader in = new BufferedReader(f);
         System.out.println("Initializing...");
@@ -34,11 +34,14 @@ public class Dictionary {
                 }
                 if (word.length() > 2) {
                     definition = word;
-                    word = word.substring(0, word.indexOf(" "));
+                    word = word.substring(0, ordinalIndexOf(word, ' ', 1));
+                    if (word.charAt(word.length()-1) == ' '){
+                        word = word.substring(0, word.length()-1);
+                    }
                     //  System.out.println(word);
                     definition = definition.substring(definition.indexOf(". ") + 2);
                     //   System.out.println(definition);
-                    map.put(word, definition);
+                    map.put(word.toLowerCase(), definition.toLowerCase());
                 }
             }
         } catch (IOException e) {
@@ -50,20 +53,39 @@ public class Dictionary {
     }
 
     public boolean isWord(String word) {
-        if (map.get(word) != null) {
+        if (map.containsKey(word.toLowerCase())) {
             return true;
-        } else if (map.get(word + "1") != null) {
+        } else if (map.containsKey(word.toLowerCase() + "1")) {
             return true;
         } else {
             return false;
         }
     }
-    public List<String> closestWords(String input){
-    List<String> suggestedWords = new ArrayList<String>();
-                
-    return suggestedWords;
-}
-    public String define(String word){
-        return map.get(word);
+
+    public List<String> closestWords(String input) {
+        List<String> suggestedWords = new ArrayList<String>();
+
+        return suggestedWords;
+    }
+
+    public String define(String word) {
+        String definitions = "";
+        for (String key : map.keySet()) {
+            if (key.contains(word.toLowerCase()) && key.matches(".*\\d.*")) {
+                definitions += map.get(key);
+            }
+            if (key.equals(word.toLowerCase())) {
+                definitions += map.get(key);
+            }
+        }
+        return definitions;
+    }
+
+    public static int ordinalIndexOf(String str, char c, int n) {
+        int pos = str.indexOf(c, 0);
+        while (n-- > 0 && pos != -1) {
+            pos = str.indexOf(c, pos + 1);
+        }
+        return pos;
     }
 }
